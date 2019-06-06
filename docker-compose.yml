@@ -1,7 +1,7 @@
 version: "3.2"
 services:
   parity:
-    image: parity/parity:stable
+    image: mcd-test
     container_name: parity
     ports:
       - "8545:8545"
@@ -11,9 +11,6 @@ services:
       - "8546"
     user: root
     working_dir: /home/parity
-    volumes:
-      - $PWD/config/parity/keys:/home/parity/.local/share/io.parity.ethereum/keys
-      - $PWD/config/parity/parity-dev-constantinopole.json:/home/parity/config/parity-dev-constantinopole.json
     command: ["--chain=/home/parity/config/parity-dev-constantinopole.json",
               "--tracing=on",
               "--pruning=archive",
