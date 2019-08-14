@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker-compose up -d parity parity2
+docker-compose up -d parity 

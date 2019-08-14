@@ -16,31 +16,6 @@ services:
               "--pruning=archive",
               "--jsonrpc-interface=all",
               "--jsonrpc-hosts=all",
-              "--node-key=912a8f2f7853dd90a2d3ebb943b3fa7db852e3d4040e091f2fdfd08aace48c41c453cab85b0d9d3a87e8f7af6881d2206263e584a950a18d911655222be68e5c",
-              "--base-path=/home/parity/.local/share/io.parity.ethereum/"]
-
-  parity2:
-    image: parity/parity:stable
-    container_name: parity2
-    ports:
-      - "8745:8745"
-      - "8746:8746"
-    expose:
-      - "8745"
-      - "8746"
-    user: root
-    working_dir: /home/parity
-    volumes:
-      - $PWD/config/parity/keys:/home/parity/.local/share/io.parity.ethereum/keys
-      - $PWD/config/parity/parity-dev-constantinopole.json:/home/parity/config/parity-dev-constantinopole.json
-    command: ["--chain=/home/parity/config/parity-dev-constantinopole.json",
-              "--tracing=on",
-              "--pruning=archive",
-              "--jsonrpc-interface=all",
-              "--jsonrpc-hosts=all",
-              "--ws-port=8746",
-              "--jsonrpc-port=8745",
-              "--bootnodes=enode://912a8f2f7853dd90a2d3ebb943b3fa7db852e3d4040e091f2fdfd08aace48c41c453cab85b0d9d3a87e8f7af6881d2206263e584a950a18d911655222be68e5c@parity:30303",
               "--base-path=/home/parity/.local/share/io.parity.ethereum/"]
 
   testchain-dss-deployer:
@@ -56,3 +31,34 @@ services:
       - $PWD/src:/home/maker/src
     command: >
       /home/maker/deploy-mcd.sh
+
+  pymaker-unit-testing-dss-deployer:
+    build:
+      context: dapphub-tools
+    image: makerdao/dapphub-tools
+    container_name: pymaker-unit-testing-dss-deployer
+    privileged: true
+    working_dir: /home/maker
+    volumes:
+      - $PWD/config/parity/keys:/testchain-data/keys
+      - $PWD/bin/deploy-mcd.sh:/home/maker/deploy-mcd.sh
+      - $PWD/src:/home/maker/src
+      - $PWD/config/deploy-testchain_pymaker-unit-testing.json:/home/maker/src/deployment-scripts/deploy-testchain.json
+    command: >
+      /home/maker/deploy-mcd.sh
+
+  auction-keeper-integration-testing-dss-deployer:
+    build:
+      context: dapphub-tools
+    image: makerdao/dapphub-tools
+    container_name: auction-keeper-integration-testing-dss-deployer
+    privileged: true
+    working_dir: /home/maker
+    volumes:
+      - $PWD/config/parity/keys:/testchain-data/keys
+      - $PWD/bin/deploy-mcd.sh:/home/maker/deploy-mcd.sh
+      - $PWD/src:/home/maker/src
+      - $PWD/config/deploy-testchain_auction-keeper-integration-testing.json:/home/maker/src/deployment-scripts/deploy-testchain.json
+    command: >
+      /home/maker/deploy-mcd.sh
+
